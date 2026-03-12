@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <dimension ref="A1:H60"/>
+  <sheetData>
+    <row r="1"><c r="A1" t="inlineStr"><is><t>Event_ID</t></is></c><c r="B1" t="inlineStr"><is><t>Event_Adi</t></is></c><c r="C1" t="inlineStr"><is><t>Baslangic</t></is></c><c r="D1" t="inlineStr"><is><t>Bitis</t></is></c><c r="E1" t="inlineStr"><is><t>Priority</t></is></c><c r="F1" t="inlineStr"><is><t>Deeplink_Pinned</t></is></c><c r="G1" t="inlineStr"><is><t>Aktif_mi</t></is></c><c r="H1" t="inlineStr"><is><t>Deeplink_Sira</t></is></c></row>
+    <row r="2"><c r="A2" t="inlineStr"><is><t>E_DL</t></is></c><c r="B2" t="inlineStr"><is><t>Deeplink Decor</t></is></c><c r="C2" s="1"><v>45992</v></c><c r="D2" s="1"><v>46037</v></c><c r="E2"><v>99</v></c><c r="F2" t="inlineStr"><is><t>Evet</t></is></c><c r="G2" t="inlineStr"><is><t>Evet</t></is></c><c r="H2"><f>IF(F2=&quot;Evet&quot;,0,1)</f></c></row>
+    <row r="3"><c r="A3" t="inlineStr"><is><t>E_TG</t></is></c><c r="B3" t="inlineStr"><is><t>Thanksgiving</t></is></c><c r="C3" s="1"><v>46006</v></c><c r="D3" s="1"><v>46016</v></c><c r="E3"><v>1</v></c><c r="F3" t="inlineStr"><is><t>Hayir</t></is></c><c r="G3" t="inlineStr"><is><t>Evet</t></is></c><c r="H3"><f>IF(F3=&quot;Evet&quot;,0,1)</f></c></row>
+    <row r="4"><c r="A4" t="inlineStr"><is><t>E_XMAS</t></is></c><c r="B4" t="inlineStr"><is><t>Christmas</t></is></c><c r="C4" s="1"><v>45992</v></c><c r="D4" s="1"><v>46022</v></c><c r="E4"><v>2</v></c><c r="F4" t="inlineStr"><is><t>Hayir</t></is></c><c r="G4" t="inlineStr"><is><t>Evet</t></is></c><c r="H4"><f>IF(F4=&quot;Evet&quot;,0,1)</f></c></row>
+    <row r="5"><c r="A5" t="inlineStr"><is><t>E_UA_JAN</t></is></c><c r="B5" t="inlineStr"><is><t>UA Decor Jan</t></is></c><c r="C5" s="1"><v>46023</v></c><c r="D5" s="1"><v>46032</v></c><c r="E5"><v>5</v></c><c r="F5" t="inlineStr"><is><t>Hayir</t></is></c><c r="G5" t="inlineStr"><is><t>Evet</t></is></c><c r="H5"><f>IF(F5=&quot;Evet&quot;,0,1)</f></c></row>
+    <row r="6"><c r="H6"><f>IF(F6=&quot;&quot;,&quot;&quot;,IF(F6=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="7"><c r="H7"><f>IF(F7=&quot;&quot;,&quot;&quot;,IF(F7=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="8"><c r="H8"><f>IF(F8=&quot;&quot;,&quot;&quot;,IF(F8=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="9"><c r="H9"><f>IF(F9=&quot;&quot;,&quot;&quot;,IF(F9=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="10"><c r="H10"><f>IF(F10=&quot;&quot;,&quot;&quot;,IF(F10=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="11"><c r="H11"><f>IF(F11=&quot;&quot;,&quot;&quot;,IF(F11=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="12"><c r="H12"><f>IF(F12=&quot;&quot;,&quot;&quot;,IF(F12=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="13"><c r="H13"><f>IF(F13=&quot;&quot;,&quot;&quot;,IF(F13=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="14"><c r="H14"><f>IF(F14=&quot;&quot;,&quot;&quot;,IF(F14=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="15"><c r="H15"><f>IF(F15=&quot;&quot;,&quot;&quot;,IF(F15=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="16"><c r="H16"><f>IF(F16=&quot;&quot;,&quot;&quot;,IF(F16=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="17"><c r="H17"><f>IF(F17=&quot;&quot;,&quot;&quot;,IF(F17=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="18"><c r="H18"><f>IF(F18=&quot;&quot;,&quot;&quot;,IF(F18=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="19"><c r="H19"><f>IF(F19=&quot;&quot;,&quot;&quot;,IF(F19=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="20"><c r="H20"><f>IF(F20=&quot;&quot;,&quot;&quot;,IF(F20=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="21"><c r="H21"><f>IF(F21=&quot;&quot;,&quot;&quot;,IF(F21=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="22"><c r="H22"><f>IF(F22=&quot;&quot;,&quot;&quot;,IF(F22=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="23"><c r="H23"><f>IF(F23=&quot;&quot;,&quot;&quot;,IF(F23=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="24"><c r="H24"><f>IF(F24=&quot;&quot;,&quot;&quot;,IF(F24=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="25"><c r="H25"><f>IF(F25=&quot;&quot;,&quot;&quot;,IF(F25=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="26"><c r="H26"><f>IF(F26=&quot;&quot;,&quot;&quot;,IF(F26=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="27"><c r="H27"><f>IF(F27=&quot;&quot;,&quot;&quot;,IF(F27=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="28"><c r="H28"><f>IF(F28=&quot;&quot;,&quot;&quot;,IF(F28=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="29"><c r="H29"><f>IF(F29=&quot;&quot;,&quot;&quot;,IF(F29=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="30"><c r="H30"><f>IF(F30=&quot;&quot;,&quot;&quot;,IF(F30=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="31"><c r="H31"><f>IF(F31=&quot;&quot;,&quot;&quot;,IF(F31=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="32"><c r="H32"><f>IF(F32=&quot;&quot;,&quot;&quot;,IF(F32=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="33"><c r="H33"><f>IF(F33=&quot;&quot;,&quot;&quot;,IF(F33=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="34"><c r="H34"><f>IF(F34=&quot;&quot;,&quot;&quot;,IF(F34=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="35"><c r="H35"><f>IF(F35=&quot;&quot;,&quot;&quot;,IF(F35=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="36"><c r="H36"><f>IF(F36=&quot;&quot;,&quot;&quot;,IF(F36=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="37"><c r="H37"><f>IF(F37=&quot;&quot;,&quot;&quot;,IF(F37=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="38"><c r="H38"><f>IF(F38=&quot;&quot;,&quot;&quot;,IF(F38=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="39"><c r="H39"><f>IF(F39=&quot;&quot;,&quot;&quot;,IF(F39=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="40"><c r="H40"><f>IF(F40=&quot;&quot;,&quot;&quot;,IF(F40=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="41"><c r="H41"><f>IF(F41=&quot;&quot;,&quot;&quot;,IF(F41=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="42"><c r="H42"><f>IF(F42=&quot;&quot;,&quot;&quot;,IF(F42=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="43"><c r="H43"><f>IF(F43=&quot;&quot;,&quot;&quot;,IF(F43=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="44"><c r="H44"><f>IF(F44=&quot;&quot;,&quot;&quot;,IF(F44=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="45"><c r="H45"><f>IF(F45=&quot;&quot;,&quot;&quot;,IF(F45=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="46"><c r="H46"><f>IF(F46=&quot;&quot;,&quot;&quot;,IF(F46=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="47"><c r="H47"><f>IF(F47=&quot;&quot;,&quot;&quot;,IF(F47=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="48"><c r="H48"><f>IF(F48=&quot;&quot;,&quot;&quot;,IF(F48=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="49"><c r="H49"><f>IF(F49=&quot;&quot;,&quot;&quot;,IF(F49=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="50"><c r="H50"><f>IF(F50=&quot;&quot;,&quot;&quot;,IF(F50=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="51"><c r="H51"><f>IF(F51=&quot;&quot;,&quot;&quot;,IF(F51=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="52"><c r="H52"><f>IF(F52=&quot;&quot;,&quot;&quot;,IF(F52=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="53"><c r="H53"><f>IF(F53=&quot;&quot;,&quot;&quot;,IF(F53=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="54"><c r="H54"><f>IF(F54=&quot;&quot;,&quot;&quot;,IF(F54=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="55"><c r="H55"><f>IF(F55=&quot;&quot;,&quot;&quot;,IF(F55=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="56"><c r="H56"><f>IF(F56=&quot;&quot;,&quot;&quot;,IF(F56=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="57"><c r="H57"><f>IF(F57=&quot;&quot;,&quot;&quot;,IF(F57=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="58"><c r="H58"><f>IF(F58=&quot;&quot;,&quot;&quot;,IF(F58=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="59"><c r="H59"><f>IF(F59=&quot;&quot;,&quot;&quot;,IF(F59=&quot;Evet&quot;,0,1))</f></c></row>
+    <row r="60"><c r="H60"><f>IF(F60=&quot;&quot;,&quot;&quot;,IF(F60=&quot;Evet&quot;,0,1))</f></c></row>
+  </sheetData>
+</worksheet>

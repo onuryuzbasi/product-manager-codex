@@ -1,0 +1,19 @@
+Sade Planlayici (2 Sekme)
+
+Amaç:
+- Planlama karmasasini azaltmak
+- Girilen event datasindan gun bazli "hangi event gorunur" cikisini hizli gormek
+
+Kullanim (Google Sheets):
+1) Iki sekme ac: 01_Sade_Plan ve 02_Akis_Takvimi
+2) Ilgili TSV dosyalarini Tab delimiter ile import et
+3) Sadece su alanlari doldur:
+   - 01_Sade_Plan: Event listesi (baslangic/bitis/priority/cooldown)
+   - 02_Akis_Takvimi: Tarih, Oyuncu_ID, Kaynak, Level10_Tarih, Deeplink_Event_ID
+4) Diger kolonlar otomatik dolacak
+
+Not:
+- Deeplink oyuncularinda Deeplink_Event_ID aktif tarih araligindaysa her zaman once gelir.
+- Organik oyuncularda en dusuk priority secilir.
+- Bekleyen listesi ayni gun aktif olup secilmeyen eventleri gosterir.
+- Popup kolonu manuel not icin birakildi (or: "Etkinlik Bitti").

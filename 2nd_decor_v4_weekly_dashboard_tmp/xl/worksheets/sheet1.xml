@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <dimension ref="A1:G5"/>
+  <sheetData>
+    <row r="1"><c r="A1" t="inlineStr"><is><t>Event_ID</t></is></c><c r="B1" t="inlineStr"><is><t>Event_Adi</t></is></c><c r="C1" t="inlineStr"><is><t>Baslangic</t></is></c><c r="D1" t="inlineStr"><is><t>Bitis</t></is></c><c r="E1" t="inlineStr"><is><t>Priority</t></is></c><c r="F1" t="inlineStr"><is><t>Deeplink_Pinned</t></is></c><c r="G1" t="inlineStr"><is><t>Aktif_mi</t></is></c></row>
+    <row r="2"><c r="A2" t="inlineStr"><is><t>E_DL</t></is></c><c r="B2" t="inlineStr"><is><t>Deeplink Decor</t></is></c><c r="C2" t="inlineStr"><is><t>2025-12-01</t></is></c><c r="D2" t="inlineStr"><is><t>2026-01-15</t></is></c><c r="E2" t="inlineStr"><is><t>99</t></is></c><c r="F2" t="inlineStr"><is><t>Evet</t></is></c><c r="G2" t="inlineStr"><is><t>Evet</t></is></c></row>
+    <row r="3"><c r="A3" t="inlineStr"><is><t>E_TG</t></is></c><c r="B3" t="inlineStr"><is><t>Thanksgiving</t></is></c><c r="C3" t="inlineStr"><is><t>2025-12-15</t></is></c><c r="D3" t="inlineStr"><is><t>2025-12-25</t></is></c><c r="E3" t="inlineStr"><is><t>1</t></is></c><c r="F3" t="inlineStr"><is><t>Hayir</t></is></c><c r="G3" t="inlineStr"><is><t>Evet</t></is></c></row>
+    <row r="4"><c r="A4" t="inlineStr"><is><t>E_XMAS</t></is></c><c r="B4" t="inlineStr"><is><t>Christmas</t></is></c><c r="C4" t="inlineStr"><is><t>2025-12-01</t></is></c><c r="D4" t="inlineStr"><is><t>2025-12-31</t></is></c><c r="E4" t="inlineStr"><is><t>2</t></is></c><c r="F4" t="inlineStr"><is><t>Hayir</t></is></c><c r="G4" t="inlineStr"><is><t>Evet</t></is></c></row>
+    <row r="5"><c r="A5" t="inlineStr"><is><t>E_UA_JAN</t></is></c><c r="B5" t="inlineStr"><is><t>UA Decor Jan</t></is></c><c r="C5" t="inlineStr"><is><t>2026-01-01</t></is></c><c r="D5" t="inlineStr"><is><t>2026-01-10</t></is></c><c r="E5" t="inlineStr"><is><t>5</t></is></c><c r="F5" t="inlineStr"><is><t>Hayir</t></is></c><c r="G5" t="inlineStr"><is><t>Evet</t></is></c></row>
+  </sheetData>
+</worksheet>

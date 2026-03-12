@@ -1,0 +1,5 @@
+interface:
+  display_name: "Match-3 PM + Designer"
+  short_description: "Match-3 issue planlayan PM, game ve product designer"
+  default_prompt: "Use $match3-product-manager-designer to draft a structured match-3 issue plan, then suggest how to improve the plan template from what we learned."
+

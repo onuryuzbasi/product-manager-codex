@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2nd Decor V4 - Haftalik Dashboard</title>
+    <style>
+      :root {
+        --bg: #f4f6f8;
+        --panel: #ffffff;
+        --line: #d6dce3;
+        --text: #0f1720;
+        --muted: #556575;
+        --accent: #0b6a88;
+        --accent-soft: #d9eef5;
+        --org: #1e9b62;
+        --deeplink: #d97706;
+        --active: #0b6a88;
+        --overlap: #a11d33;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 500px at 100% -10%, #e0eef4 0%, transparent 60%),
+          radial-gradient(900px 500px at -10% 100%, #e8f3ea 0%, transparent 60%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1200px, calc(100% - 32px));
+        margin: 24px auto 32px;
+      }
+
+      .header {
+        background: linear-gradient(110deg, #0b6a88 0%, #145a6f 100%);
+        color: #f9fdff;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 8px 24px rgba(16, 38, 53, 0.18);
+      }
+
+      .header h1 {
+        margin: 0 0 6px;
+        font-size: 24px;
+        letter-spacing: 0.2px;
+      }
+
+      .header p {
+        margin: 0;
+        color: #d8edf7;
+        font-size: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+
+      .card .label {
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+
+      .card .value {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .section {
+        margin-top: 16px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 16px;
+      }
+
+      .controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+        font-size: 13px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .btn.active {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        color: #063f52;
+      }
+
+      .table-wrap {
+        width: 100%;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+
+      table {
+        border-collapse: collapse;
+        min-width: 100%;
+        background: #fff;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid #e8edf2;
+        border-right: 1px solid #edf1f5;
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      th {
+        background: #f8fbfd;
+        color: #3f4f5e;
+        font-weight: 600;
+      }
+
+      td.code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 600;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+      }
+
+      .dot.org {
+        background: var(--org);
+      }
+
+      .dot.deeplink {
+        background: var(--deeplink);
+      }
+
+      .gantt th.sticky,
+      .gantt td.sticky {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: #fff;
+      }
+
+      .gantt th.sticky.second,
+      .gantt td.sticky.second {
+        left: 110px;
+      }
+
+      .gantt td.block {
+        text-align: center;
+        color: transparent;
+        min-width: 92px;
+      }
+
+      .gantt td.block.active {
+        background: rgba(11, 106, 136, 0.16);
+        color: #0a4d62;
+      }
+
+      .gantt td.block.winner-org {
+        background: rgba(30, 155, 98, 0.22);
+        color: #0d6f42;
+      }
+
+      .gantt td.block.winner-dl {
+        background: rgba(217, 119, 6, 0.24);
+        color: #9a5205;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 12px;
+        border: 1px solid #d2dce4;
+        color: #334450;
+        background: #f7fafc;
+      }
+
+      .tag.warn {
+        border-color: #f4c8d0;
+        background: #fdecef;
+        color: #8b2033;
+      }
+
+      .legend {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="header">
+        <h1>2nd Decor V4 - Haftalik Dashboard</h1>
+        <p>Günlük yerine haftalık görünüm: çakışmalar, winner event ve queue tek ekranda.</p>
+      </header>
+
+      <section class="grid" id="kpiGrid"></section>
+
+      <section class="section">
+        <h2>Event Girdisi</h2>
+        <div class="table-wrap">
+          <table id="eventTable">
+            <thead>
+              <tr>
+                <th>Event ID</th>
+                <th>Event Adi</th>
+                <th>Baslangic</th>
+                <th>Bitis</th>
+                <th>Priority</th>
+                <th>Deeplink</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Haftalik Ozet</h2>
+        <div class="table-wrap">
+          <table id="summaryTable">
+            <thead>
+              <tr>
+                <th>Hafta</th>
+                <th>Tarih Araligi</th>
+                <th>Aktif Eventler</th>
+                <th>Cakisma (max)</th>
+                <th>Winner Organik</th>
+                <th>Winner Deeplink</th>
+                <th>Queue (Hafta Baslangici)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Haftalik Gantt</h2>
+        <div class="controls">
+          <button class="btn active" data-mode="deeplink">Highlight: Winner Deeplink</button>
+          <button class="btn" data-mode="organik">Highlight: Winner Organik</button>
+        </div>
+        <div class="table-wrap">
+          <table class="gantt" id="ganttTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="legend">
+          <span class="tag"><span class="dot" style="background:#7fa9ba;"></span>ACTIVE</span>
+          <span class="tag"><span class="dot org"></span>Winner Organik</span>
+          <span class="tag"><span class="dot deeplink"></span>Winner Deeplink</span>
+          <span class="tag warn">Cakisma > 1 olan haftalari ozet tablosundan takip et</span>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const rawEvents = [
+        { id: "E_DL", name: "Deeplink Decor", start: "2025-12-01", end: "2026-01-15", priority: 99, deeplink: true, active: true },
+        { id: "E_TG", name: "Thanksgiving", start: "2025-12-15", end: "2025-12-25", priority: 1, deeplink: false, active: true },
+        { id: "E_XMAS", name: "Christmas", start: "2025-12-01", end: "2025-12-31", priority: 2, deeplink: false, active: true },
+        { id: "E_UA_JAN", name: "UA Decor Jan", start: "2026-01-01", end: "2026-01-10", priority: 5, deeplink: false, active: true }
+      ];
+
+      const events = rawEvents.map((e) => ({
+        ...e,
+        startDate: new Date(e.start + "T00:00:00"),
+        endDate: new Date(e.end + "T00:00:00")
+      }));
+
+      let winnerMode = "deeplink";
+
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      const fmtRange = (start, end) =>
+        `${start.toLocaleDateString("tr-TR", { day: "2-digit", month: "short" })} - ${end.toLocaleDateString("tr-TR", { day: "2-digit", month: "short" })}`;
+
+      const mondayOf = (d) => {
+        const x = new Date(d);
+        const day = (x.getDay() + 6) % 7;
+        x.setDate(x.getDate() - day);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      };
+
+      const addDays = (d, n) => {
+        const x = new Date(d);
+        x.setDate(x.getDate() + n);
+        return x;
+      };
+
+      const dateIter = (start, end) => {
+        const out = [];
+        for (let d = new Date(start); d <= end; d = addDays(d, 1)) {
+          out.push(new Date(d));
+        }
+        return out;
+      };
+
+      const activeOnDay = (d) => events.filter((e) => e.active && e.startDate <= d && e.endDate >= d);
+
+      const overlapsWeek = (e, w) => e.startDate <= w.end && e.endDate >= w.start;
+
+      const sortOrg = (a, b) =>
+        a.priority - b.priority ||
+        a.startDate - b.startDate ||
+        a.id.localeCompare(b.id);
+
+      const sortQueue = (a, b) =>
+        (a.deeplink ? 0 : 1) - (b.deeplink ? 0 : 1) ||
+        sortOrg(a, b);
+
+      const first = (arr) => (arr.length ? arr[0] : null);
+
+      const minStart = events.filter((e) => e.active).map((e) => e.startDate).sort((a, b) => a - b)[0];
+      const maxEnd = events.filter((e) => e.active).map((e) => e.endDate).sort((a, b) => b - a)[0];
+
+      const weeks = [];
+      for (let ws = mondayOf(minStart), i = 1; ws <= maxEnd; ws = addDays(ws, 7), i++) {
+        weeks.push({ id: `W${i}`, start: new Date(ws), end: addDays(ws, 6) });
+      }
+
+      const weekSummary = weeks.map((w) => {
+        const days = dateIter(w.start, w.end);
+        const maxOverlap = Math.max(...days.map((d) => activeOnDay(d).length), 0);
+        const weekActive = events.filter((e) => e.active && overlapsWeek(e, w));
+        const mondayActive = activeOnDay(w.start);
+        const orgWinner = first([...mondayActive].sort(sortOrg));
+        const dlWinner = first([...mondayActive].filter((e) => e.deeplink).sort(sortOrg)) || orgWinner;
+        const queue = [...mondayActive].sort(sortQueue);
+        return {
+          week: w.id,
+          range: fmtRange(w.start, w.end),
+          activeIds: weekActive.map((e) => e.id),
+          maxOverlap,
+          orgWinner: orgWinner ? orgWinner.id : "",
+          dlWinner: dlWinner ? dlWinner.id : "",
+          queueText: queue.map((e) => e.id).join(" > ")
+        };
+      });
+
+      function renderKpis() {
+        const overlapWeeks = weekSummary.filter((w) => w.maxOverlap > 1).length;
+        const peak = Math.max(...weekSummary.map((w) => w.maxOverlap), 0);
+        const cards = [
+          { label: "Toplam Event", value: events.length },
+          { label: "Toplam Hafta", value: weekSummary.length },
+          { label: "Peak Cakisma", value: peak },
+          { label: "Cakisan Hafta", value: overlapWeeks }
+        ];
+        document.getElementById("kpiGrid").innerHTML = cards
+          .map((c) => `<div class="card"><div class="label">${c.label}</div><div class="value">${c.value}</div></div>`)
+          .join("");
+      }
+
+      function renderEventTable() {
+        const tbody = document.querySelector("#eventTable tbody");
+        tbody.innerHTML = events
+          .map(
+            (e) => `
+          <tr>
+            <td class="code">${e.id}</td>
+            <td>${e.name}</td>
+            <td>${e.start}</td>
+            <td>${e.end}</td>
+            <td>${e.priority}</td>
+            <td>${e.deeplink ? "Evet" : "Hayir"}</td>
+          </tr>`
+          )
+          .join("");
+      }
+
+      function renderSummary() {
+        const tbody = document.querySelector("#summaryTable tbody");
+        tbody.innerHTML = weekSummary
+          .map((w) => {
+            const overlapClass = w.maxOverlap > 1 ? 'class="tag warn"' : 'class="tag"';
+            return `
+            <tr>
+              <td class="code">${w.week}</td>
+              <td>${w.range}</td>
+              <td>${w.activeIds.join(", ") || "-"}</td>
+              <td><span ${overlapClass}>${w.maxOverlap}</span></td>
+              <td><span class="dot org"></span>${w.orgWinner || "-"}</td>
+              <td><span class="dot deeplink"></span>${w.dlWinner || "-"}</td>
+              <td>${w.queueText || "-"}</td>
+            </tr>`;
+          })
+          .join("");
+      }
+
+      function renderGantt() {
+        const thead = document.querySelector("#ganttTable thead");
+        const tbody = document.querySelector("#ganttTable tbody");
+
+        thead.innerHTML = `
+          <tr>
+            <th class="sticky">Event ID</th>
+            <th class="sticky second">Priority</th>
+            ${weekSummary.map((w) => `<th>${w.week}<br><small>${w.range}</small></th>`).join("")}
+          </tr>`;
+
+        const rows = events.map((e) => {
+          const cells = weekSummary
+            .map((w) => {
+              const on = w.activeIds.includes(e.id);
+              const winnerId = winnerMode === "deeplink" ? w.dlWinner : w.orgWinner;
+              const winnerClass =
+                on && e.id === winnerId
+                  ? winnerMode === "deeplink"
+                    ? " winner-dl"
+                    : " winner-org"
+                  : "";
+              return `<td class="block${on ? " active" : ""}${winnerClass}">${on ? "ACTIVE" : ""}</td>`;
+            })
+            .join("");
+
+          return `
+            <tr>
+              <td class="sticky code">${e.id}</td>
+              <td class="sticky second">${e.priority}</td>
+              ${cells}
+            </tr>`;
+        });
+
+        const winnerRow = `
+          <tr>
+            <td class="sticky code">${winnerMode === "deeplink" ? "Winner Deeplink" : "Winner Organik"}</td>
+            <td class="sticky second">-</td>
+            ${weekSummary
+              .map((w) => {
+                const id = winnerMode === "deeplink" ? w.dlWinner : w.orgWinner;
+                return `<td class="block ${winnerMode === "deeplink" ? "winner-dl" : "winner-org"}">${id || "-"}</td>`;
+              })
+              .join("")}
+          </tr>`;
+
+        tbody.innerHTML = rows.join("") + winnerRow;
+      }
+
+      function bindControls() {
+        document.querySelectorAll(".btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            winnerMode = btn.dataset.mode;
+            document.querySelectorAll(".btn").forEach((x) => x.classList.remove("active"));
+            btn.classList.add("active");
+            renderGantt();
+          });
+        });
+      }
+
+      renderKpis();
+      renderEventTable();
+      renderSummary();
+      renderGantt();
+      bindControls();
+    </script>
+  </body>
+</html>
