@@ -1,0 +1,4 @@
+interface:
+  display_name: "Match3 QA Case Writer"
+  short_description: "Turn game plans into QA cases and Jira checklists."
+  default_prompt: "Use $match3-feature-qa to convert this feature plan into a QA test set and a Jira-ready single issue checklist."

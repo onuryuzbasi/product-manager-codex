@@ -1,0 +1,5 @@
+Event_ID	Event_Adi	Tip	Baslangic	Bitis	Priority	Cooldown_Gun	Deeplink_Pinned	Aktif_mi
+E_DL	Deeplink Decor	Deeplink	2025-12-01	2026-01-15	99	1	Evet	Evet
+E_TG	Thanksgiving	Donemsel	2025-12-15	2025-12-25	1	1	Hayir	Evet
+E_XMAS	Christmas	Donemsel	2025-12-01	2025-12-31	2	1	Hayir	Evet
+E_UA_JAN	UA Decor Jan	UA	2026-01-01	2026-01-10	5	1	Hayir	Evet
