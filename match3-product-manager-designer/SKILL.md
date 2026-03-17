@@ -51,3 +51,10 @@ For every new issue plan:
 If details are missing, ask only for the minimum fields listed in `references/required-issue-inputs.md`.
 If the user cannot provide them, proceed with explicit assumptions and mark uncertainty.
 
+## Repo Maintenance Contract
+
+When this skill is used in this repository:
+
+1. Record reusable confirmed decisions in the relevant knowledge log under `references/`.
+2. If templates, references, or skill behavior are changed, record the delta in `/SKILL_UPDATES.md`.
+3. Before any `pushla` request is fulfilled, record the plan/feature summary in `/PROJECT_LOG.md`.
