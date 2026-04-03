@@ -1,0 +1,137 @@
+{
+  "p2e_system": {
+    "eligibility": {
+      "enabled": true,
+      "allowed_countries": ["US"],
+      "new_users_only": true,
+      "deeplink_modes": {
+        "btc": "TARGETED_BTC",
+        "usd": "TARGETED_USD",
+        "none": "ORGANIC"
+      }
+    },
+    "rewards": {
+      "level_bands": [
+        {
+          "min_level": 1,
+          "max_level": 100,
+          "level_win_base": 0.2,
+          "reward_per_move": 0.01,
+          "reward_per_rocket": 0.01,
+          "reward_per_bomb": 0.03,
+          "reward_per_disco": 0.05,
+          "rewarded_ad_multiplier": 5.0
+        },
+        {
+          "min_level": 101,
+          "max_level": 300,
+          "level_win_base": 0.15,
+          "reward_per_move": 0.008,
+          "reward_per_rocket": 0.01,
+          "reward_per_bomb": 0.025,
+          "reward_per_disco": 0.04,
+          "rewarded_ad_multiplier": 4.0
+        }
+      ],
+      "default_band": {
+        "level_win_base": 0.1,
+        "reward_per_move": 0.005,
+        "reward_per_rocket": 0.008,
+        "reward_per_bomb": 0.02,
+        "reward_per_disco": 0.03,
+        "rewarded_ad_multiplier": 3.0
+      }
+    },
+    "streak": {
+      "enabled_for_p2e_active": true,
+      "multiplier_table": [
+        { "streak_index": 1, "multiplier": 1.0 },
+        { "streak_index": 2, "multiplier": 1.1 },
+        { "streak_index": 3, "multiplier": 1.25 },
+        { "streak_index": 4, "multiplier": 1.5 },
+        { "streak_index": 5, "multiplier": 2.0 }
+      ]
+    },
+    "conversion": {
+      "btc_conversion_rate": 0.000001,
+      "usd_conversion_rate": 0.01,
+      "display_precision": {
+        "BTC": 8,
+        "USD": 2
+      }
+    },
+    "activation": {
+      "organic_requires_manual_activate": true,
+      "targeted_auto_active": true,
+      "show_targeted_info_popup_once": true,
+      "show_organic_popup_until_activate": true,
+      "welcome_bonus_units": 10.0
+    },
+    "wallet": {
+      "show_amount_for_active_users": true,
+      "show_earn_label_for_inactive_users": true,
+      "zbd_activation_button_enabled": true
+    },
+    "cashout": {
+      "auto_initialize_threshold_usd": 0.95,
+      "integer_payout_only": true,
+      "withdraw_rounding_mode": "FLOOR",
+      "min_withdrawable_units": 1
+    },
+    "ux_copy": {
+      "map_cta_targeted_template": "{amount} {currency_icon}",
+      "map_cta_organic_text": "Earn",
+      "organic_activate_text": "Activate",
+      "organic_decline_text": "No Thanks",
+      "level1_p2e_tooltip_text": "Play to Earn"
+    },
+    "experiments": {
+      "us_new_user_launch_test": {
+        "enabled": true,
+        "population": {
+          "countries": ["US"],
+          "new_users_only": true
+        },
+        "buckets": [
+          {
+            "name": "passive",
+            "weight": 50,
+            "overrides": {
+              "activation.targeted_auto_active": false
+            }
+          },
+          {
+            "name": "active",
+            "weight": 50,
+            "overrides": {
+              "activation.targeted_auto_active": true
+            }
+          }
+        ]
+      },
+      "us_new_user_high_reward_test": {
+        "enabled": false,
+        "population": {
+          "countries": ["US"],
+          "new_users_only": true
+        },
+        "buckets": [
+          {
+            "name": "passive",
+            "weight": 50,
+            "overrides": {}
+          },
+          {
+            "name": "active_high_reward",
+            "weight": 50,
+            "overrides": {
+              "activation.targeted_auto_active": true,
+              "rewards.level_bands[0].level_win_base": 0.25,
+              "rewards.level_bands[0].reward_per_move": 0.015
+            }
+          }
+        ]
+      }
+    }
+  }
+}

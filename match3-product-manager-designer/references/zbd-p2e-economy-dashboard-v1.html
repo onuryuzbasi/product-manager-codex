@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZBD P2E Economy Dashboard v1</title>
+    <style>
+      :root {
+        --bg: #f5f3ee;
+        --panel: #fffdf8;
+        --line: #ded7cc;
+        --text: #1c1a16;
+        --muted: #6d655a;
+        --gold: #b07b18;
+        --gold-soft: #f7edd3;
+        --green: #1f7a4f;
+        --green-soft: #e1f2e8;
+        --red: #ad3d2f;
+        --red-soft: #f9e4df;
+        --blue: #245f73;
+        --blue-soft: #ddeef4;
+        --amber: #b86a16;
+        --amber-soft: #fae8d6;
+        --shadow: 0 10px 26px rgba(34, 28, 18, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1100px 420px at 100% 0%, #efe6d1 0%, transparent 60%),
+          radial-gradient(900px 500px at 0% 100%, #e3efe8 0%, transparent 58%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1380px, calc(100% - 28px));
+        margin: 20px auto 40px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #3a2a14 0%, #6b4b1c 55%, #9b6a1d 100%);
+        color: #fffaf1;
+        border-radius: 20px;
+        padding: 22px 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+
+      .hero p {
+        margin: 0;
+        color: #f7e9cf;
+        max-width: 900px;
+        line-height: 1.5;
+      }
+
+      .hero-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(255, 250, 241, 0.22);
+        background: rgba(255, 250, 241, 0.1);
+      }
+
+      .section {
+        margin-top: 16px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .section p.lead {
+        margin: 0 0 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        border-radius: 14px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .kpi .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .kpi .value {
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .kpi .sub {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .kpi.good {
+        background: var(--green-soft);
+        border-color: #b9dfc9;
+      }
+
+      .kpi.warn {
+        background: var(--amber-soft);
+        border-color: #ebc99e;
+      }
+
+      .kpi.bad {
+        background: var(--red-soft);
+        border-color: #ebbbb0;
+      }
+
+      .kpi.info {
+        background: var(--blue-soft);
+        border-color: #bad6e2;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+      }
+
+      .three-col {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .formula {
+        border-radius: 12px;
+        background: #faf7ef;
+        border: 1px solid #eadfca;
+        padding: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+        line-height: 1.5;
+      }
+
+      .table-wrap {
+        width: 100%;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 920px;
+        background: #fff;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid #eee8dc;
+        border-right: 1px solid #f2ece2;
+        padding: 9px 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+      }
+
+      th {
+        background: #faf7ef;
+        color: #5c5345;
+      }
+
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 3px 8px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: #fbfaf7;
+        color: #51483d;
+      }
+
+      .tag.good {
+        background: var(--green-soft);
+        border-color: #b9dfc9;
+        color: #205638;
+      }
+
+      .tag.warn {
+        background: var(--amber-soft);
+        border-color: #ebc99e;
+        color: #8f4f0c;
+      }
+
+      .tag.bad {
+        background: var(--red-soft);
+        border-color: #ebbbb0;
+        color: #8f3126;
+      }
+
+      ul {
+        margin: 8px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 6px 0;
+        line-height: 1.45;
+      }
+
+      .rule-list div {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        margin-top: 8px;
+        background: #fff;
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 1100px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .two-col,
+        .three-col {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>ZBD P2E Economy Dashboard v1</h1>
+        <p>
+          Bu dashboard, P2E sisteminin karli sekilde yonetilmesi icin tek ekranda
+          okunacak ekonomi kontrol panelidir. Mantik su: kullanicidan gelen gelir,
+          kullaniciya verilen reward ve bonus maliyetinden yuksek kalmali; sistem
+          sadece calismamali, net katkı uretmelidir.
+        </p>
+        <div class="hero-meta">
+          <span class="pill">Core Question: Kullanicidan kazandigimizdan fazlasini veriyor muyuz?</span>
+          <span class="pill">Decision Unit: Country + Bucket + Level Band + Config Snapshot</span>
+          <span class="pill">Main Rule: Revenue > Reward Cost</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>North Star</h2>
+        <div class="kpi-grid">
+          <div class="kpi good">
+            <div class="label">Net Contribution Margin</div>
+            <div class="value">Pozitif</div>
+            <div class="sub">Toplam gelir eksi toplam reward cost</div>
+          </div>
+          <div class="kpi info">
+            <div class="label">Reward Cost / Revenue</div>
+            <div class="value">&lt; 25%</div>
+            <div class="sub">Soft hedef operating zone</div>
+          </div>
+          <div class="kpi warn">
+            <div class="label">Warning Zone</div>
+            <div class="value">25% - 35%</div>
+            <div class="sub">Reward pacing yavaslatilmali</div>
+          </div>
+          <div class="kpi bad">
+            <div class="label">Freeze Zone</div>
+            <div class="value">&gt; 35%</div>
+            <div class="sub">Bonus ve reward hizli azaltilmali</div>
+          </div>
+          <div class="kpi info">
+            <div class="label">Config Rule</div>
+            <div class="value">1 knob</div>
+            <div class="sub">Ayni anda tek degisken grubu degistir</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Core Formulas</h2>
+        <p class="lead">Dashboard ve canli tuning butun kararlari bu hesaplar uzerinden verecek.</p>
+        <div class="two-col">
+          <div class="card">
+            <h3>Unit Economics</h3>
+            <div class="formula">total_revenue
+= rewarded_revenue
++ inter_revenue
++ iap_revenue
+
+total_reward_cost
+= level_reward_cost
++ welcome_bonus_cost
++ welcome_back_cost
++ promo_bonus_cost
++ cashout_cost
+
+net_contribution_margin
+= total_revenue
+- total_reward_cost
+
+reward_cost_ratio
+= total_reward_cost / total_revenue</div>
+          </div>
+          <div class="card">
+            <h3>Budget Rules</h3>
+            <div class="formula">allowed_reward_budget
+= total_revenue * target_cost_ratio
+
+safe_reward_budget
+= (total_revenue * target_cost_ratio)
+- reserve_buffer
+
+reward_velocity
+= reward_cost_per_user_per_day
+
+break_even_day
+= first day where cumulative_revenue
+   exceeds cumulative_reward_cost</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Main KPI Blocks</h2>
+        <div class="three-col">
+          <div class="card">
+            <h3>1. Revenue Block</h3>
+            <ul>
+              <li>Rewarded Revenue</li>
+              <li>Interstitial Revenue</li>
+              <li>IAP Revenue</li>
+              <li>Total Revenue</li>
+              <li>Revenue Per Active User</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>2. Cost Block</h3>
+            <ul>
+              <li>Level Reward Cost</li>
+              <li>Welcome Bonus Cost</li>
+              <li>Welcome Back Cost</li>
+              <li>Gift / Promo Bonus Cost</li>
+              <li>Total Reward Cost</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>3. Margin Block</h3>
+            <ul>
+              <li>Net Contribution Margin</li>
+              <li>Reward Cost Ratio</li>
+              <li>Break-even Day</li>
+              <li>Reward Velocity</li>
+              <li>Pending Payout Liability</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Dashboard Tabs</h2>
+        <p class="lead">Tek ekranda ama zihinsel olarak 4 tablo gibi okunmali.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tab</th>
+                <th>Ne goruruz</th>
+                <th>Neden onemli</th>
+                <th>Primary Decision</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Executive Summary</strong></td>
+                <td>Total Revenue, Total Reward Cost, Net Margin, Cost Ratio, Cashout Liability</td>
+                <td>Sistem para kazandiriyor mu?</td>
+                <td>Reward aggressiveness yukselir mi, duser mi?</td>
+              </tr>
+              <tr>
+                <td><strong>Cohort Profitability</strong></td>
+                <td>D1, D3, D7 revenue vs reward cost by install cohort</td>
+                <td>Erken donemde zarar edip sonradan topluyor muyuz?</td>
+                <td>Retention icin bonus gerekli mi, fazla mi?</td>
+              </tr>
+              <tr>
+                <td><strong>Reward Mix</strong></td>
+                <td>Level reward, welcome, welcome back, promo, ad multiplier maliyetleri</td>
+                <td>Maliyeti hangi reward tipi sisiriyor?</td>
+                <td>Hangi knob'a dokunacagiz?</td>
+              </tr>
+              <tr>
+                <td><strong>Config Impact</strong></td>
+                <td>Config snapshot bazli activation, revenue, cost ratio, retention</td>
+                <td>Son degisiklik ise yaradi mi?</td>
+                <td>Config rollback mi, rollout mu?</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Required Dimensions</h2>
+        <div class="three-col">
+          <div class="card">
+            <h3>Acquisition</h3>
+            <ul>
+              <li>Country</li>
+              <li>Platform</li>
+              <li>Entry Source</li>
+              <li>Deep Link Type</li>
+              <li>New User Only</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Economy</h3>
+            <ul>
+              <li>AB Bucket</li>
+              <li>Config Snapshot ID</li>
+              <li>Level Band</li>
+              <li>Payer vs Non-payer</li>
+              <li>ZBD Initialized</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Risk</h3>
+            <ul>
+              <li>Fraud Status</li>
+              <li>Payout State</li>
+              <li>Threshold Reached</li>
+              <li>Cashout Requested</li>
+              <li>Payout Failed</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Reward Budget Rules</h2>
+        <div class="rule-list">
+          <div><strong>Rule 1:</strong> Total reward cost hicbir zaman total revenue'ya yaklasmamalı; sistemin net margin birakmasi zorunlu.</div>
+          <div><strong>Rule 2:</strong> Welcome bonus, welcome back ve promo gift birer growth tool'dur; herkese default entitlement gibi dagitilmamali.</div>
+          <div><strong>Rule 3:</strong> Reward tuning yaparken ayni anda sadece bir knob grubu degismeli. Aksi halde sonuc karisir.</div>
+          <div><strong>Rule 4:</strong> Her config degisikligi `config_snapshot_id` ile izlenmeli ve revenue/cost sonucu ayrik okunmali.</div>
+          <div><strong>Rule 5:</strong> Reward cost ratio warning zone'a girerse once bonuslar, sonra level reward pacing, sonra ad multiplier ayarlanir.</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Intervention Matrix</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Belirti</th>
+                <th>Bakilacak KPI</th>
+                <th>Olası Sebep</th>
+                <th>Ilk Mudahale</th>
+                <th>Ikinci Mudahale</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cost ratio hizla yukseliyor</td>
+                <td><span class="tag bad">Reward Cost Ratio</span></td>
+                <td>Reward pacing fazla yuksek</td>
+                <td>`welcome_bonus_units` azalt</td>
+                <td>`level_win_base` ve `reward_per_move` azalt</td>
+              </tr>
+              <tr>
+                <td>Activation iyi ama margin zayif</td>
+                <td><span class="tag warn">Net Margin</span></td>
+                <td>Funnel iyi, odul fazla</td>
+                <td>Welcome back bonus daralt</td>
+                <td>Streak multiplier yumusat</td>
+              </tr>
+              <tr>
+                <td>Margin iyi ama activation dusuk</td>
+                <td><span class="tag warn">Activate Rate</span></td>
+                <td>Erken fayda hissi zayif</td>
+                <td>Welcome bonus artis test et</td>
+                <td>Level 1-10 reward pace arttir</td>
+              </tr>
+              <tr>
+                <td>Payout liability buyuyor</td>
+                <td><span class="tag warn">Pending Payout</span></td>
+                <td>Threshold / queue / fail issue</td>
+                <td>Auto initialize akisini kontrol et</td>
+                <td>Payout threshold gecici arttir</td>
+              </tr>
+              <tr>
+                <td>Rewarded revenue dusuk</td>
+                <td><span class="tag warn">Rewarded Rev / User</span></td>
+                <td>Ad attach zayif</td>
+                <td>Rewarded multiplier test et</td>
+                <td>Ad teklif surface'ini optimize et</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Config Knobs</h2>
+        <div class="three-col">
+          <div class="card">
+            <h3>Reward Knobs</h3>
+            <ul>
+              <li><code>level_win_base</code></li>
+              <li><code>reward_per_move</code></li>
+              <li><code>reward_per_rocket</code></li>
+              <li><code>reward_per_bomb</code></li>
+              <li><code>reward_per_disco</code></li>
+              <li><code>rewarded_ad_multiplier</code></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Bonus Knobs</h3>
+            <ul>
+              <li><code>welcome_bonus_units</code></li>
+              <li><code>welcome_back_bonus_units</code></li>
+              <li><code>promo_bonus_units</code></li>
+              <li><code>streak_multiplier_table</code></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Risk Knobs</h3>
+            <ul>
+              <li><code>auto_initialize_threshold_usd</code></li>
+              <li><code>min_withdrawable_units</code></li>
+              <li><code>withdraw_rounding_mode</code></li>
+              <li><code>allowed_countries</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Required Data Inputs</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Input</th>
+                <th>Kaynak</th>
+                <th>Kullanimi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rewarded ad revenue</td>
+                <td>Ads revenue pipeline</td>
+                <td>User ve cohort gelir hesabi</td>
+              </tr>
+              <tr>
+                <td>Interstitial revenue</td>
+                <td>Ads revenue pipeline</td>
+                <td>Total revenue hesabi</td>
+              </tr>
+              <tr>
+                <td>IAP revenue</td>
+                <td>Commerce pipeline</td>
+                <td>Total revenue ve payer ayrimi</td>
+              </tr>
+              <tr>
+                <td>Reward cost events</td>
+                <td>P2E reward events</td>
+                <td>Level reward ve bonus maliyeti</td>
+              </tr>
+              <tr>
+                <td>Payout sent / failed</td>
+                <td>Backend provider pipeline</td>
+                <td>Gercek maliyet ve risk durumu</td>
+              </tr>
+              <tr>
+                <td>Config snapshot id</td>
+                <td>Remote config resolve layer</td>
+                <td>Degisiklik etkisini ayirmak</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Daily Operating Rhythm</h2>
+        <div class="three-col">
+          <div class="card">
+            <h3>Sabah Check</h3>
+            <ul>
+              <li>Net margin pozitif mi?</li>
+              <li>Cost ratio zone degisti mi?</li>
+              <li>Payout fail spike var mi?</li>
+              <li>Son config snapshot nasil gidiyor?</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Karar</h3>
+            <ul>
+              <li>Tek problem sec</li>
+              <li>Tek knob grubu sec</li>
+              <li>Config snapshot olustur</li>
+              <li>Owner ve saat kaydi tut</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Sonuc Okuma</h3>
+            <ul>
+              <li>24-48 saat ayni kural setiyle oku</li>
+              <li>Revenue ve cost'i ayni cohortta incele</li>
+              <li>Acquisition mix bozulduysa yorumu ertele</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Launch Defaults</h2>
+        <div class="rule-list">
+          <div><strong>Soft Target:</strong> reward cost ratio %20-%25 arasi</div>
+          <div><strong>Warning:</strong> %25 uzeri dikkatli tuning</div>
+          <div><strong>Freeze:</strong> %35 uzeri agresif reward azaltma</div>
+          <div><strong>Audience:</strong> US + new user only ile basla</div>
+          <div><strong>Read Unit:</strong> Country + Bucket + Level Band + Config Snapshot</div>
+        </div>
+        <p class="small">Bu dashboard tek basina veri kaynagi degil; dogru okunmasi icin event taxonomy, config snapshot ve payout backend eventleri birlikte beslenmelidir.</p>
+      </section>
+    </div>
+  </body>
+</html>
