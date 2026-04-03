@@ -34,6 +34,8 @@ Use this structure while planning issues.
 - ZBD/P2E state rule: reward calculation, wallet display, and payout transfer should be modeled as separate layers to avoid state mismatch.
 - ZBD/P2E documentation rule: analytics tracking sheet, example config payload, and simplified state diagram are useful companion artifacts for engineering handoff.
 - ZBD/P2E dashboard rule: economy review should center on net contribution margin, reward cost ratio, reward velocity, and config-snapshot-based interpretation.
+- Match-3 core economy dashboard rule: first-version LiveOps economy view should stay intentionally small and focus on source/sink ratio, spend session rate, zero-balance rate, hoarding rate, median balance, spend rescue rate, and level-band pressure.
+- Match-3 economy + level-design rule: economy dashboards must include level-band and outlier-level views so difficulty spikes are not misread as healthy monetization pressure.
 
 ## Risk History
 
