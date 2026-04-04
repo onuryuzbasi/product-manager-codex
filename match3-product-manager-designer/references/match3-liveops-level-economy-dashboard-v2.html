@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match-3 Level Economy Dashboard v2</title>
+    <style>
+      :root {
+        --bg: #f4efe6;
+        --panel: #fffdf9;
+        --line: #ddd3c5;
+        --text: #201a14;
+        --muted: #6d6458;
+        --blue: #4f90a8;
+        --amber: #d08b2f;
+        --red: #cf5c4d;
+        --green: #3e8b63;
+        --blue-soft: #deedf4;
+        --amber-soft: #faeddc;
+        --red-soft: #f9e4e0;
+        --green-soft: #e4f2ea;
+        --shadow: 0 12px 28px rgba(39, 30, 20, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(980px 420px at 100% 0%, #e8dcc6 0%, transparent 58%),
+          radial-gradient(1100px 520px at 0% 100%, #e1ece6 0%, transparent 62%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1360px, calc(100% - 24px));
+        margin: 18px auto 34px;
+      }
+
+      .hero,
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 22px;
+        background: linear-gradient(135deg, #42301b 0%, #6f5028 55%, #9d702d 100%);
+        color: #fff8ee;
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 900px;
+        color: #f4e8d7;
+        line-height: 1.55;
+      }
+
+      .meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .pill {
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        background: rgba(255, 248, 238, 0.08);
+        border: 1px solid rgba(255, 248, 238, 0.18);
+      }
+
+      .section {
+        margin-top: 16px;
+        padding: 16px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: end;
+        margin-bottom: 12px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .lead,
+      .small {
+        color: var(--muted);
+      }
+
+      .lead {
+        margin: 5px 0 0;
+        line-height: 1.5;
+      }
+
+      .small {
+        font-size: 12px;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .kpi.good { background: var(--green-soft); }
+      .kpi.warn { background: var(--amber-soft); }
+      .kpi.bad { background: var(--red-soft); }
+      .kpi.info { background: var(--blue-soft); }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .value {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .sub {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 14px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 14px;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .chart {
+        display: grid;
+        grid-template-columns: repeat(20, minmax(0, 1fr));
+        gap: 6px;
+        align-items: end;
+        height: 270px;
+        padding-top: 10px;
+      }
+
+      .bar-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
+        height: 100%;
+      }
+
+      .bar {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        min-height: 8px;
+      }
+
+      .bar.normal { background: linear-gradient(180deg, #87b6c8, var(--blue)); }
+      .bar.warn { background: linear-gradient(180deg, #efba62, var(--amber)); }
+      .bar.bad { background: linear-gradient(180deg, #e98b7e, var(--red)); }
+
+      .bar-value {
+        margin-bottom: 6px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .bar-label {
+        margin-top: 7px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .legend {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-right: 6px;
+      }
+
+      .blue { background: var(--blue); }
+      .amber { background: var(--amber); }
+      .red { background: var(--red); }
+
+      .split {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+        border-bottom: 1px solid #efe7dd;
+        border-right: 1px solid #f4ede4;
+      }
+
+      th {
+        background: #faf7f1;
+        color: #5a5145;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: #faf8f3;
+      }
+
+      .tag.good { background: var(--green-soft); color: #24593f; }
+      .tag.warn { background: var(--amber-soft); color: #8b4e11; }
+      .tag.bad { background: var(--red-soft); color: #8f3528; }
+
+      ul {
+        margin: 8px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 6px 0;
+        line-height: 1.45;
+      }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+      }
+
+      @media (max-width: 1120px) {
+        .kpis,
+        .layout,
+        .split {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          width: min(100%, calc(100% - 16px));
+          margin: 8px auto 24px;
+        }
+
+        .hero,
+        .section {
+          padding: 14px;
+          border-radius: 14px;
+        }
+
+        .hero h1 {
+          font-size: 24px;
+        }
+
+        .chart {
+          gap: 4px;
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Level Economy Dashboard v2</h1>
+        <p>
+          Bu versiyon sadece level design baskisini degil, coin/gift balance
+          akisindaki bozulmayi da okumak icin tasarlandi. Ana alarm metriği
+          artik `Below Continue Threshold Rate`: oyuncu continue alabilecek
+          coin seviyesinin altina ne kadar sik dusuyor?
+        </p>
+        <div class="meta">
+          <span class="pill">View: Levels 81-100</span>
+          <span class="pill">Threshold: continue cost = 900 coin</span>
+          <span class="pill">Counting rule: state transition based</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Top Metrics</h2>
+            <p class="lead">Secili level araligi icin temel okuma. Veriler ornek/mock.</p>
+          </div>
+          <div class="small">Snapshot: 2026-04-03 / Continue price: 900</div>
+        </div>
+        <div class="kpis">
+          <div class="kpi warn">
+            <div class="label">Average Coin Balance</div>
+            <div class="value">980</div>
+            <div class="sub">Threshold'a cok yakin. Oyuncu buffer'i zayif.</div>
+          </div>
+          <div class="kpi bad">
+            <div class="label">Below Continue Threshold User Rate</div>
+            <div class="value">22%</div>
+            <div class="sub">Kullanicilarin %22'si en az bir kez 900 altina dusmus.</div>
+          </div>
+          <div class="kpi warn">
+            <div class="label">Threshold Entry / User</div>
+            <div class="value">1.7</div>
+            <div class="sub">Ustune cikip tekrar altina dusme tekrarlaniyor.</div>
+          </div>
+          <div class="kpi info">
+            <div class="label">Gift + Reward Coin / User</div>
+            <div class="value">640</div>
+            <div class="sub">Kaynak akisi var ama risk state'i hala yuksek.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Below Continue Threshold by Level</h2>
+            <p class="lead">Asil alarm grafigi. Gercek sifir yerine continue alamayacak seviyeye dusen oyuncuyu izler.</p>
+          </div>
+          <div class="small">Sayim mantigi: threshold ustunden altina ilk giris</div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <div class="chart">
+              <div class="bar-col"><div class="bar-value">13%</div><div class="bar normal" style="height: 32%"></div><div class="bar-label">81</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 35%"></div><div class="bar-label">82</div></div>
+              <div class="bar-col"><div class="bar-value">16%</div><div class="bar warn" style="height: 40%"></div><div class="bar-label">83</div></div>
+              <div class="bar-col"><div class="bar-value">18%</div><div class="bar warn" style="height: 45%"></div><div class="bar-label">84</div></div>
+              <div class="bar-col"><div class="bar-value">17%</div><div class="bar warn" style="height: 42%"></div><div class="bar-label">85</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar warn" style="height: 48%"></div><div class="bar-label">86</div></div>
+              <div class="bar-col"><div class="bar-value">29%</div><div class="bar bad" style="height: 72%"></div><div class="bar-label">87</div></div>
+              <div class="bar-col"><div class="bar-value">31%</div><div class="bar bad" style="height: 78%"></div><div class="bar-label">88</div></div>
+              <div class="bar-col"><div class="bar-value">27%</div><div class="bar bad" style="height: 68%"></div><div class="bar-label">89</div></div>
+              <div class="bar-col"><div class="bar-value">21%</div><div class="bar warn" style="height: 52%"></div><div class="bar-label">90</div></div>
+              <div class="bar-col"><div class="bar-value">15%</div><div class="bar normal" style="height: 38%"></div><div class="bar-label">91</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 35%"></div><div class="bar-label">92</div></div>
+              <div class="bar-col"><div class="bar-value">16%</div><div class="bar warn" style="height: 40%"></div><div class="bar-label">93</div></div>
+              <div class="bar-col"><div class="bar-value">24%</div><div class="bar bad" style="height: 60%"></div><div class="bar-label">94</div></div>
+              <div class="bar-col"><div class="bar-value">26%</div><div class="bar bad" style="height: 65%"></div><div class="bar-label">95</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar warn" style="height: 50%"></div><div class="bar-label">96</div></div>
+              <div class="bar-col"><div class="bar-value">18%</div><div class="bar warn" style="height: 45%"></div><div class="bar-label">97</div></div>
+              <div class="bar-col"><div class="bar-value">16%</div><div class="bar warn" style="height: 40%"></div><div class="bar-label">98</div></div>
+              <div class="bar-col"><div class="bar-value">15%</div><div class="bar normal" style="height: 38%"></div><div class="bar-label">99</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 35%"></div><div class="bar-label">100</div></div>
+            </div>
+            <div class="legend">
+              <span><span class="dot blue"></span>Normal</span>
+              <span><span class="dot amber"></span>Watch</span>
+              <span><span class="dot red"></span>Riskli</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Why this metric</h3>
+            <ul>
+              <li>Gercek sifir nadir olabilir; pratikte oyuncu continue alamadigi anda sikisiyor.</li>
+              <li>Bu nedenle `hard zero` yerine `functional zero` izleniyor.</li>
+              <li>87-89 ve 94-95 arasi belirgin risk bolgesi.</li>
+            </ul>
+            <h3>Counting rule</h3>
+            <ul>
+              <li><code>balance &gt;= 900</code> iken <code>balance &lt; 900</code> olursa 1 entry say.</li>
+              <li>Threshold altindayken tekrar tekrar sayma.</li>
+              <li>Tekrar 900 ustune cikip yeniden altina inerse yeni entry say.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Spend Rate by Level</h2>
+            <p class="lead">Threshold altina dusulen level'larda harcama da yukseliyor mu, birlikte oku.</p>
+          </div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <div class="chart">
+              <div class="bar-col"><div class="bar-value">18%</div><div class="bar normal" style="height: 45%"></div><div class="bar-label">81</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">82</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">83</div></div>
+              <div class="bar-col"><div class="bar-value">22%</div><div class="bar warn" style="height: 55%"></div><div class="bar-label">84</div></div>
+              <div class="bar-col"><div class="bar-value">23%</div><div class="bar warn" style="height: 58%"></div><div class="bar-label">85</div></div>
+              <div class="bar-col"><div class="bar-value">24%</div><div class="bar warn" style="height: 60%"></div><div class="bar-label">86</div></div>
+              <div class="bar-col"><div class="bar-value">36%</div><div class="bar bad" style="height: 90%"></div><div class="bar-label">87</div></div>
+              <div class="bar-col"><div class="bar-value">38%</div><div class="bar bad" style="height: 95%"></div><div class="bar-label">88</div></div>
+              <div class="bar-col"><div class="bar-value">35%</div><div class="bar bad" style="height: 88%"></div><div class="bar-label">89</div></div>
+              <div class="bar-col"><div class="bar-value">27%</div><div class="bar warn" style="height: 68%"></div><div class="bar-label">90</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">91</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">92</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">93</div></div>
+              <div class="bar-col"><div class="bar-value">31%</div><div class="bar bad" style="height: 78%"></div><div class="bar-label">94</div></div>
+              <div class="bar-col"><div class="bar-value">33%</div><div class="bar bad" style="height: 83%"></div><div class="bar-label">95</div></div>
+              <div class="bar-col"><div class="bar-value">25%</div><div class="bar warn" style="height: 63%"></div><div class="bar-label">96</div></div>
+              <div class="bar-col"><div class="bar-value">23%</div><div class="bar warn" style="height: 58%"></div><div class="bar-label">97</div></div>
+              <div class="bar-col"><div class="bar-value">21%</div><div class="bar normal" style="height: 53%"></div><div class="bar-label">98</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">99</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">100</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Read together</h3>
+            <ul>
+              <li>Threshold spike + spend spike birlikteyse oyuncu zorlanarak harciyor olabilir.</li>
+              <li>Bu durum revenue icin iyi gorunebilir ama retention icin risklidir.</li>
+              <li>Bu nedenle ekonomi mi level mi bozuk, alttaki source blokla ayrisir.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Reward / Gift Source Check</h2>
+            <p class="lead">Sorun level zorlugu mu, yoksa oyuna verilen coin akisi mi yetersiz, bunu ayirmak icin.</p>
+          </div>
+        </div>
+        <div class="split">
+          <div class="card">
+            <h3>Coin Sources per User</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th>Coin</th>
+                    <th>Read</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Level rewards</td>
+                    <td>260</td>
+                    <td>Normal</td>
+                  </tr>
+                  <tr>
+                    <td>Daily gifts</td>
+                    <td>120</td>
+                    <td>Dusuk</td>
+                  </tr>
+                  <tr>
+                    <td>Event gifts</td>
+                    <td>180</td>
+                    <td>Normal</td>
+                  </tr>
+                  <tr>
+                    <td>Inbox / compensation</td>
+                    <td>80</td>
+                    <td>Normal</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Interpretation</h3>
+            <ul>
+              <li>Eger source blok genel olarak zayifsa sadece level tweak yetmeyebilir.</li>
+              <li>Ozellikle daily gift dusukse oyuncu threshold altindan toparlanmakta zorlanabilir.</li>
+              <li>Level spike + zayif gift source birlikteyse ekonomi tarafi da bozuk olabilir.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Suggested Action Table</h2>
+            <p class="lead">Bu dashboarddan nasil mudahale cikaracagimizi netlestiren kisa karar tablosu.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pattern</th>
+                <th>What it means</th>
+                <th>First action</th>
+                <th>Second action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Threshold high + Spend high + Source normal</td>
+                <td>Level tarafi fazla sert olabilir</td>
+                <td>Move count / blocker / target tuning</td>
+                <td>Continue value review</td>
+              </tr>
+              <tr>
+                <td>Threshold high + Spend low + Source weak</td>
+                <td>Genel coin akisi zayif olabilir</td>
+                <td>Gift / daily reward review</td>
+                <td>Early sink baskisini azalt</td>
+              </tr>
+              <tr>
+                <td>Threshold low + Spend low + Balance high</td>
+                <td>Ekonomi fazla rahat</td>
+                <td>Sink gorunurlugu artir</td>
+                <td>Reward pacing kis</td>
+              </tr>
+              <tr>
+                <td>Threshold entries high but user rate flat</td>
+                <td>Ayni oyuncu tekrar tekrar sıkisiyor</td>
+                <td>Recovery loop incele</td>
+                <td>Gift cadence veya continue pricing bak</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Data Definition</h2>
+            <p class="lead">V1 icin gereken minimum veri alanlari.</p>
+          </div>
+        </div>
+        <div class="split">
+          <div class="card">
+            <h3>Minimum fields</h3>
+            <ul>
+              <li><code>level_id</code></li>
+              <li><code>user_id</code> veya aggregate user count</li>
+              <li><code>coin_balance_after_level</code></li>
+              <li><code>continue_price</code></li>
+              <li><code>spend_happened</code></li>
+              <li><code>gift_coin_amount</code></li>
+              <li><code>reward_coin_amount</code></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Core event rule</h3>
+            <ul>
+              <li><code>below_continue_threshold_entered</code> event'i state change bazli uretilmeli.</li>
+              <li>Threshold altinda kaldigi surece yeni event yazilmamali.</li>
+              <li>Threshold ustune cikip tekrar altina inerse yeni event yazilmali.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

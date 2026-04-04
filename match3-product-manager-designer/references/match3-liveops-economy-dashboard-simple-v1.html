@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match-3 Economy Dashboard Simple v1</title>
+    <style>
+      :root {
+        --bg: #f5f1e8;
+        --panel: #fffdfa;
+        --line: #ddd4c7;
+        --text: #1f1a14;
+        --muted: #6c6256;
+        --green: #2a7856;
+        --green-soft: #e2f0e8;
+        --amber: #b06a18;
+        --amber-soft: #f8ead8;
+        --red: #b04235;
+        --red-soft: #f8e3e0;
+        --blue: #2f6778;
+        --blue-soft: #dfeef4;
+        --shadow: 0 10px 26px rgba(38, 29, 18, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(900px 360px at 100% 0%, #eadfcf 0%, transparent 58%),
+          radial-gradient(1100px 520px at 0% 100%, #e1ece6 0%, transparent 60%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1180px, calc(100% - 24px));
+        margin: 18px auto 32px;
+      }
+
+      .hero,
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 22px;
+        background: linear-gradient(135deg, #43321d 0%, #725128 55%, #9f6f29 100%);
+        color: #fff8ef;
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 760px;
+        color: #f4e8d4;
+        line-height: 1.55;
+      }
+
+      .hero-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .pill {
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(255, 248, 239, 0.18);
+        background: rgba(255, 248, 239, 0.08);
+      }
+
+      .section {
+        margin-top: 16px;
+        padding: 16px;
+      }
+
+      .section h2 {
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+
+      .lead {
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .kpi.good {
+        background: var(--green-soft);
+        border-color: #c5dfd1;
+      }
+
+      .kpi.warn {
+        background: var(--amber-soft);
+        border-color: #ebc99e;
+      }
+
+      .kpi.bad {
+        background: var(--red-soft);
+        border-color: #edbeb8;
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .value {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .sub {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 720px;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+        border-bottom: 1px solid #eee7dc;
+        border-right: 1px solid #f3ede5;
+      }
+
+      th {
+        background: #faf7f1;
+        color: #5a5146;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: #faf8f2;
+      }
+
+      .tag.good {
+        background: var(--green-soft);
+        color: #24593f;
+      }
+
+      .tag.warn {
+        background: var(--amber-soft);
+        color: #8c4d0b;
+      }
+
+      .tag.bad {
+        background: var(--red-soft);
+        color: #8f3429;
+      }
+
+      .notes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .note {
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fff;
+      }
+
+      .note h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .note p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      @media (max-width: 860px) {
+        .kpi-grid,
+        .notes {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .wrap {
+          width: min(100%, calc(100% - 16px));
+          margin: 8px auto 24px;
+        }
+
+        .hero,
+        .section {
+          padding: 14px;
+          border-radius: 14px;
+        }
+
+        .hero h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Simple Economy Dashboard</h1>
+        <p>
+          Ilk versiyonda sadece 3 soruya bakiyoruz: oyuncunun elinde ne kadar
+          kaynak kaliyor, oyuncu ne kadar harciyor, oyuncu ne kadar sik sifira
+          dusuyor. Alttaki tablo da bunu `early`, `mid`, `late` level bandleri
+          icin ayri gosteriyor.
+        </p>
+        <div class="hero-meta">
+          <span class="pill">Focus: Basit okuma</span>
+          <span class="pill">Main KPI: Balance + Spend + Zero</span>
+          <span class="pill">Breakdown: Early / Mid / Late</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Top Metrics</h2>
+        <p class="lead">Tum oyuncular icin genel gorunum. Mock veri kullanildi.</p>
+        <div class="kpi-grid">
+          <div class="kpi warn">
+            <div class="label">Average Balance</div>
+            <div class="value">124</div>
+            <div class="sub">
+              Oyuncunun gun sonu ortalama kaynagi. Biraz yuksek, yani sistem tam
+              sert degil.
+            </div>
+          </div>
+          <div class="kpi good">
+            <div class="label">Spend Rate</div>
+            <div class="value">24%</div>
+            <div class="sub">
+              Sessionlarin ne kadarinda harcama var. Simdilik saglikli gorunuyor.
+            </div>
+          </div>
+          <div class="kpi bad">
+            <div class="label">Zero Balance Rate</div>
+            <div class="value">17%</div>
+            <div class="sub">
+              Oyuncunun ne kadar sik sifira dustugu. Burasi biraz fazla yuksek.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Level Band Table</h2>
+        <p class="lead">
+          Sorun oyunun neresinde diye bakmak icin sadece 3 level grubuna ayiriyoruz.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Level Band</th>
+                <th>Avg Balance</th>
+                <th>Spend Rate</th>
+                <th>Zero Balance Rate</th>
+                <th>Quick Read</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Early Game</strong><br />Level 1-50</td>
+                <td>148</td>
+                <td>15%</td>
+                <td>8%</td>
+                <td><span class="tag warn">biraz rahat</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mid Game</strong><br />Level 51-150</td>
+                <td>86</td>
+                <td>29%</td>
+                <td>21%</td>
+                <td><span class="tag bad">fazla sıkışık</span></td>
+              </tr>
+              <tr>
+                <td><strong>Late Game</strong><br />Level 151+</td>
+                <td>173</td>
+                <td>22%</td>
+                <td>11%</td>
+                <td><span class="tag good">genel olarak iyi</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>How To Read</h2>
+        <div class="notes">
+          <div class="note">
+            <h3>Average Balance ne diyor?</h3>
+            <p>
+              Bu sayı çok yüksekse oyuncu kaynak biriktiriyor olabilir. Çok düşükse
+              oyuncu sürekli baskı altında kalıyor olabilir.
+            </p>
+          </div>
+          <div class="note">
+            <h3>Spend Rate ne diyor?</h3>
+            <p>
+              Harcama davranışının var olup olmadığını gösterir. Çok düşükse ekonomi
+              gevşek, çok yüksekse sistem fazla baskıcı olabilir.
+            </p>
+          </div>
+          <div class="note">
+            <h3>Zero Balance Rate ne diyor?</h3>
+            <p>
+              En net alarm metriği bu. Oyuncu sık sık sıfıra düşüyorsa oyunda
+              tıkanma riski büyüyor demektir.
+            </p>
+          </div>
+          <div class="note">
+            <h3>Bu örnekte ne anlıyoruz?</h3>
+            <p>
+              Asıl problem `mid game`. Oyuncu burada daha fazla harcıyor ama aynı
+              zamanda çok daha fazla sıfıra düşüyor. İlk bakılacak yer bu band.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match-3 Level Economy Dashboard v1</title>
+    <style>
+      :root {
+        --bg: #f4efe5;
+        --panel: #fffdf9;
+        --line: #ddd3c4;
+        --text: #201a14;
+        --muted: #6d6458;
+        --blue: #4f8fa8;
+        --blue-soft: #deedf4;
+        --amber: #d08b2f;
+        --amber-soft: #faeddc;
+        --red: #cf5c4d;
+        --red-soft: #f9e5e1;
+        --green: #3c8a62;
+        --green-soft: #e4f2ea;
+        --shadow: 0 12px 28px rgba(39, 30, 20, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(1000px 420px at 100% 0%, #e8dcc6 0%, transparent 58%),
+          radial-gradient(1100px 520px at 0% 100%, #e1ece6 0%, transparent 62%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1320px, calc(100% - 24px));
+        margin: 18px auto 34px;
+      }
+
+      .hero,
+      .section {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        padding: 22px;
+        background: linear-gradient(135deg, #42301b 0%, #6f5028 55%, #9d702d 100%);
+        color: #fff8ee;
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 840px;
+        color: #f4e8d7;
+        line-height: 1.55;
+      }
+
+      .meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .pill {
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        background: rgba(255, 248, 238, 0.08);
+        border: 1px solid rgba(255, 248, 238, 0.18);
+      }
+
+      .section {
+        margin-top: 16px;
+        padding: 16px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: end;
+        margin-bottom: 12px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .lead,
+      .small {
+        color: var(--muted);
+      }
+
+      .lead {
+        margin: 5px 0 0;
+        line-height: 1.5;
+      }
+
+      .small {
+        font-size: 12px;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .kpi.good {
+        background: var(--green-soft);
+      }
+
+      .kpi.warn {
+        background: var(--amber-soft);
+      }
+
+      .kpi.bad {
+        background: var(--red-soft);
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .value {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .sub {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 14px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 14px;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .chart {
+        display: grid;
+        grid-template-columns: repeat(20, minmax(0, 1fr));
+        gap: 6px;
+        align-items: end;
+        height: 270px;
+        padding-top: 10px;
+      }
+
+      .bar-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: end;
+        height: 100%;
+        min-width: 0;
+      }
+
+      .bar {
+        width: 100%;
+        border-radius: 8px 8px 0 0;
+        min-height: 8px;
+      }
+
+      .bar.normal {
+        background: linear-gradient(180deg, #87b6c8, var(--blue));
+      }
+
+      .bar.warn {
+        background: linear-gradient(180deg, #efba62, var(--amber));
+      }
+
+      .bar.bad {
+        background: linear-gradient(180deg, #e98b7e, var(--red));
+      }
+
+      .bar-label {
+        margin-top: 7px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .bar-value {
+        margin-bottom: 6px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .legend {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-right: 6px;
+      }
+
+      .blue {
+        background: var(--blue);
+      }
+
+      .amber {
+        background: var(--amber);
+      }
+
+      .red {
+        background: var(--red);
+      }
+
+      ul {
+        margin: 8px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 6px 0;
+        line-height: 1.45;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 680px;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+        border-bottom: 1px solid #efe7dd;
+        border-right: 1px solid #f4ede4;
+      }
+
+      th {
+        background: #faf7f1;
+        color: #5a5145;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: #faf8f3;
+      }
+
+      .tag.good {
+        background: var(--green-soft);
+        color: #24593f;
+      }
+
+      .tag.warn {
+        background: var(--amber-soft);
+        color: #8b4e11;
+      }
+
+      .tag.bad {
+        background: var(--red-soft);
+        color: #8f3528;
+      }
+
+      @media (max-width: 1080px) {
+        .kpis,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          width: min(100%, calc(100% - 16px));
+          margin: 8px auto 24px;
+        }
+
+        .hero,
+        .section {
+          padding: 14px;
+          border-radius: 14px;
+        }
+
+        .hero h1 {
+          font-size: 24px;
+        }
+
+        .chart {
+          gap: 4px;
+          height: 220px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Level Economy Dashboard</h1>
+        <p>
+          Match-3 oyun icin level level ekonomi takibi. Ana amac, hangi
+          level'larda oyuncu sikisiyor, hangi level'larda fazla rahat kaliyor,
+          ve bu durum harcamaya nasil yansiyor onu hizli gormek.
+        </p>
+        <div class="meta">
+          <span class="pill">View: Levels 81-100</span>
+          <span class="pill">Main Metric: Zero Balance Rate</span>
+          <span class="pill">Game Type: Royal Match style</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Top Metrics</h2>
+            <p class="lead">Seçili level aralığı için genel görünüm. Veriler örnek/mock.</p>
+          </div>
+          <div class="small">Snapshot: 2026-04-03</div>
+        </div>
+        <div class="kpis">
+          <div class="kpi warn">
+            <div class="label">Average Balance After Level</div>
+            <div class="value">91</div>
+            <div class="sub">Biraz dusuk. Oyuncu secili aralikta baski altinda.</div>
+          </div>
+          <div class="kpi warn">
+            <div class="label">Spend Rate</div>
+            <div class="value">28%</div>
+            <div class="sub">Harcama var ama bunu tek basina iyi diye okumayiz.</div>
+          </div>
+          <div class="kpi bad">
+            <div class="label">Zero Balance Rate</div>
+            <div class="value">19%</div>
+            <div class="sub">Asil alarm burada. Bazi level'larda yuksek spike var.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Zero Balance by Level</h2>
+            <p class="lead">Varsayilan ana grafik. Hangi level'larda oyuncu kaynaksiz kaliyor onu gosterir.</p>
+          </div>
+          <div class="small">Hedef okuma: spike level'lari bul</div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <div class="chart">
+              <div class="bar-col"><div class="bar-value">11%</div><div class="bar normal" style="height: 31%"></div><div class="bar-label">81</div></div>
+              <div class="bar-col"><div class="bar-value">12%</div><div class="bar normal" style="height: 34%"></div><div class="bar-label">82</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 40%"></div><div class="bar-label">83</div></div>
+              <div class="bar-col"><div class="bar-value">16%</div><div class="bar warn" style="height: 46%"></div><div class="bar-label">84</div></div>
+              <div class="bar-col"><div class="bar-value">15%</div><div class="bar warn" style="height: 43%"></div><div class="bar-label">85</div></div>
+              <div class="bar-col"><div class="bar-value">17%</div><div class="bar warn" style="height: 48%"></div><div class="bar-label">86</div></div>
+              <div class="bar-col"><div class="bar-value">25%</div><div class="bar bad" style="height: 71%"></div><div class="bar-label">87</div></div>
+              <div class="bar-col"><div class="bar-value">27%</div><div class="bar bad" style="height: 77%"></div><div class="bar-label">88</div></div>
+              <div class="bar-col"><div class="bar-value">24%</div><div class="bar bad" style="height: 68%"></div><div class="bar-label">89</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar warn" style="height: 54%"></div><div class="bar-label">90</div></div>
+              <div class="bar-col"><div class="bar-value">13%</div><div class="bar normal" style="height: 37%"></div><div class="bar-label">91</div></div>
+              <div class="bar-col"><div class="bar-value">12%</div><div class="bar normal" style="height: 34%"></div><div class="bar-label">92</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 40%"></div><div class="bar-label">93</div></div>
+              <div class="bar-col"><div class="bar-value">22%</div><div class="bar bad" style="height: 63%"></div><div class="bar-label">94</div></div>
+              <div class="bar-col"><div class="bar-value">23%</div><div class="bar bad" style="height: 66%"></div><div class="bar-label">95</div></div>
+              <div class="bar-col"><div class="bar-value">18%</div><div class="bar warn" style="height: 51%"></div><div class="bar-label">96</div></div>
+              <div class="bar-col"><div class="bar-value">15%</div><div class="bar warn" style="height: 43%"></div><div class="bar-label">97</div></div>
+              <div class="bar-col"><div class="bar-value">14%</div><div class="bar normal" style="height: 40%"></div><div class="bar-label">98</div></div>
+              <div class="bar-col"><div class="bar-value">13%</div><div class="bar normal" style="height: 37%"></div><div class="bar-label">99</div></div>
+              <div class="bar-col"><div class="bar-value">12%</div><div class="bar normal" style="height: 34%"></div><div class="bar-label">100</div></div>
+            </div>
+            <div class="legend">
+              <span><span class="dot blue"></span>Normal</span>
+              <span><span class="dot amber"></span>Watch</span>
+              <span><span class="dot red"></span>Riskli</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>How To Read</h3>
+            <ul>
+              <li>Tekil spike'lar kritik. Cunku band ortalamasi sorunu gizleyebilir.</li>
+              <li>87-89 ve 94-95 arasi net problem bolgesi gibi gorunuyor.</li>
+              <li>Bu grafik tek basina yeterli degil; asagidaki spend ve fail ile birlikte okunmali.</li>
+            </ul>
+            <h3>Immediate Action</h3>
+            <ul>
+              <li>Ilk bakilacak level'lar: 87, 88, 94, 95</li>
+              <li>Move count, target difficulty, blocker density kontrol et</li>
+              <li>Continue teklif degeri bu level'larda anlamsiz mi bak</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Spend Rate by Level</h2>
+            <p class="lead">Ayni level'larda harcama artiyor mu? Spike'lar saglikli mi, zorlamali mi?</p>
+          </div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <div class="chart">
+              <div class="bar-col"><div class="bar-value">18%</div><div class="bar normal" style="height: 45%"></div><div class="bar-label">81</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">82</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">83</div></div>
+              <div class="bar-col"><div class="bar-value">22%</div><div class="bar warn" style="height: 55%"></div><div class="bar-label">84</div></div>
+              <div class="bar-col"><div class="bar-value">23%</div><div class="bar warn" style="height: 58%"></div><div class="bar-label">85</div></div>
+              <div class="bar-col"><div class="bar-value">24%</div><div class="bar warn" style="height: 60%"></div><div class="bar-label">86</div></div>
+              <div class="bar-col"><div class="bar-value">35%</div><div class="bar bad" style="height: 88%"></div><div class="bar-label">87</div></div>
+              <div class="bar-col"><div class="bar-value">37%</div><div class="bar bad" style="height: 92%"></div><div class="bar-label">88</div></div>
+              <div class="bar-col"><div class="bar-value">34%</div><div class="bar bad" style="height: 85%"></div><div class="bar-label">89</div></div>
+              <div class="bar-col"><div class="bar-value">26%</div><div class="bar warn" style="height: 65%"></div><div class="bar-label">90</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">91</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">92</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">93</div></div>
+              <div class="bar-col"><div class="bar-value">31%</div><div class="bar bad" style="height: 78%"></div><div class="bar-label">94</div></div>
+              <div class="bar-col"><div class="bar-value">33%</div><div class="bar bad" style="height: 83%"></div><div class="bar-label">95</div></div>
+              <div class="bar-col"><div class="bar-value">25%</div><div class="bar warn" style="height: 63%"></div><div class="bar-label">96</div></div>
+              <div class="bar-col"><div class="bar-value">23%</div><div class="bar warn" style="height: 58%"></div><div class="bar-label">97</div></div>
+              <div class="bar-col"><div class="bar-value">21%</div><div class="bar normal" style="height: 53%"></div><div class="bar-label">98</div></div>
+              <div class="bar-col"><div class="bar-value">20%</div><div class="bar normal" style="height: 50%"></div><div class="bar-label">99</div></div>
+              <div class="bar-col"><div class="bar-value">19%</div><div class="bar normal" style="height: 48%"></div><div class="bar-label">100</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Interpretation</h3>
+            <ul>
+              <li>87-89 ve 94-95'te spend de yukseliyor.</li>
+              <li>Zero balance ve spend birlikte artiyorsa bu "oyuncu zorlanarak harciyor" olabilir.</li>
+              <li>Bu saglikli monetization olmayabilir; level fairness kontrol edilmeli.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Level Summary</h2>
+            <p class="lead">Grafikte gordugumuz spike'lari tek satirda yorumlamak icin kisa tablo.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Zero Balance</th>
+                <th>Spend Rate</th>
+                <th>Quick Read</th>
+                <th>Suggested Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>87</strong></td>
+                <td>25%</td>
+                <td>35%</td>
+                <td><span class="tag bad">zorlayici</span></td>
+                <td>Move count ve blocker baskisini incele</td>
+              </tr>
+              <tr>
+                <td><strong>88</strong></td>
+                <td>27%</td>
+                <td>37%</td>
+                <td><span class="tag bad">kritik</span></td>
+                <td>Continue degeri + level fairness review</td>
+              </tr>
+              <tr>
+                <td><strong>94</strong></td>
+                <td>22%</td>
+                <td>31%</td>
+                <td><span class="tag warn">watch</span></td>
+                <td>Target tuning ve fail reason kontrol et</td>
+              </tr>
+              <tr>
+                <td><strong>95</strong></td>
+                <td>23%</td>
+                <td>33%</td>
+                <td><span class="tag bad">riskli</span></td>
+                <td>Ardisik level spike mi bak, tekil mi bak</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>How We Would Feed Data</h2>
+            <p class="lead">Bu ekran mock veriyle cizildi ama gercek data ile de ayni mantikta beslenebilir.</p>
+          </div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <h3>Minimum data fields</h3>
+            <ul>
+              <li><code>level_id</code></li>
+              <li><code>attempt_count</code></li>
+              <li><code>spend_sessions</code></li>
+              <li><code>sessions_with_zero_balance</code></li>
+              <li><code>avg_balance_after_level</code></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What is enough for v1</h3>
+            <ul>
+              <li>Gercek data varsa bununla besleriz</li>
+              <li>Yoksa once CSV / JSON export ile baglariz</li>
+              <li>Ilk canli versiyon icin tam BI entegrasyonu sart degil</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

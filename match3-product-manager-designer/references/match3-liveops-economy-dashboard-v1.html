@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Match-3 LiveOps Economy Dashboard v1</title>
+    <style>
+      :root {
+        --bg: #f3efe6;
+        --panel: #fffdf9;
+        --line: #ddd4c5;
+        --text: #1f1a14;
+        --muted: #6e6457;
+        --green: #2b7a57;
+        --green-soft: #e4f1ea;
+        --amber: #b86a17;
+        --amber-soft: #f8ead9;
+        --red: #b24335;
+        --red-soft: #f8e3df;
+        --blue: #2e6678;
+        --blue-soft: #deedf3;
+        --ink: #4b3720;
+        --sand: #f7f1e5;
+        --shadow: 0 12px 30px rgba(46, 34, 21, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(900px 380px at 100% 0%, #eadfca 0%, transparent 58%),
+          radial-gradient(1100px 520px at 0% 100%, #ddece5 0%, transparent 60%),
+          var(--bg);
+      }
+
+      .wrap {
+        width: min(1440px, calc(100% - 28px));
+        margin: 18px auto 36px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #43311b 0%, #715127 55%, #a17028 100%);
+        color: #fff7ee;
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 900px;
+        line-height: 1.55;
+        color: #f2e6d3;
+      }
+
+      .hero-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(255, 247, 238, 0.18);
+        background: rgba(255, 247, 238, 0.09);
+      }
+
+      .section {
+        margin-top: 16px;
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: end;
+        margin-bottom: 12px;
+      }
+
+      .section h2 {
+        margin: 0;
+        font-size: 19px;
+      }
+
+      .lead,
+      .small {
+        color: var(--muted);
+      }
+
+      .lead {
+        margin: 5px 0 0;
+        line-height: 1.5;
+      }
+
+      .small {
+        font-size: 12px;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .kpi {
+        border-radius: 16px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .kpi.good {
+        background: var(--green-soft);
+        border-color: #c2ddce;
+      }
+
+      .kpi.warn {
+        background: var(--amber-soft);
+        border-color: #ecc79a;
+      }
+
+      .kpi.bad {
+        background: var(--red-soft);
+        border-color: #efbeb7;
+      }
+
+      .kpi.info {
+        background: var(--blue-soft);
+        border-color: #bfd8e2;
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .value {
+        font-size: 29px;
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .sub {
+        margin-top: 7px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .layout-2 {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 14px;
+      }
+
+      .layout-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 14px;
+      }
+
+      .card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      .formula {
+        background: var(--sand);
+        border: 1px solid #eadcc3;
+        border-radius: 12px;
+        padding: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        white-space: pre-wrap;
+        line-height: 1.5;
+      }
+
+      .metric-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 6px;
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: 1.4fr 0.8fr 1fr;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .bar {
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: #eee7da;
+        overflow: hidden;
+      }
+
+      .fill {
+        height: 100%;
+        border-radius: inherit;
+      }
+
+      .fill.green {
+        background: linear-gradient(90deg, #4ea274, #2c7b57);
+      }
+
+      .fill.amber {
+        background: linear-gradient(90deg, #e0a049, #b86a17);
+      }
+
+      .fill.red {
+        background: linear-gradient(90deg, #da8375, #b24335);
+      }
+
+      .fill.blue {
+        background: linear-gradient(90deg, #72a9ba, #2e6678);
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid var(--line);
+        background: #faf8f3;
+      }
+
+      .tag.good {
+        background: var(--green-soft);
+        color: #22583d;
+      }
+
+      .tag.warn {
+        background: var(--amber-soft);
+        color: #8f4f0d;
+      }
+
+      .tag.bad {
+        background: var(--red-soft);
+        color: #8c3428;
+      }
+
+      .tag.info {
+        background: var(--blue-soft);
+        color: #244f5d;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+      }
+
+      table {
+        width: 100%;
+        min-width: 820px;
+        border-collapse: collapse;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+        border-bottom: 1px solid #efe8dd;
+        border-right: 1px solid #f4eee5;
+      }
+
+      th {
+        background: #faf7f1;
+        color: #5a5044;
+      }
+
+      ul {
+        margin: 8px 0 0 18px;
+        padding: 0;
+      }
+
+      li {
+        margin: 6px 0;
+        line-height: 1.45;
+      }
+
+      .callout-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .callout {
+        padding: 11px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+
+      .callout strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      @media (max-width: 1120px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .layout-2,
+        .layout-3 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          width: min(100%, calc(100% - 16px));
+          margin: 8px auto 24px;
+        }
+
+        .hero,
+        .section {
+          padding: 14px;
+          border-radius: 16px;
+        }
+
+        .hero h1 {
+          font-size: 24px;
+        }
+
+        .metric-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Match-3 LiveOps Economy Dashboard v1</h1>
+        <p>
+          Bu ekran, soft currency ve booster ekonomisini tek bakista okumak icin
+          tasarlanmis sade bir operasyon panelidir. Ana soru su: oyuncuya yeterli
+          baskiyi verip harcama yaratiyor muyuz, yoksa oyuncu ya kaynaksiz kalip
+          kitleniyor ya da fazla kaynakla oyunda gevsek kaliyor mu?
+        </p>
+        <div class="hero-meta">
+          <span class="pill">North Star: Healthy spend without dead-end</span>
+          <span class="pill">Decision Unit: Segment + Level Band + Config Snapshot</span>
+          <span class="pill">Refresh: Daily + 4h for alert cards</span>
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Executive Health Strip</h2>
+            <p class="lead">30 saniyede okunacak ana health kartlari. Tum degerler ornek mock veridir.</p>
+          </div>
+          <div class="small">Snapshot: 2026-04-03 / Config: `econ_liveops_42`</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi info">
+            <div class="label">Active Users</div>
+            <div class="value">184K</div>
+            <div class="sub">7d fark: +3.8%<br />Hedef: stabil buyume</div>
+          </div>
+          <div class="kpi good">
+            <div class="label">Economy Health Score</div>
+            <div class="value">74 / 100</div>
+            <div class="sub">Hedef bant: 70 - 82<br />Durum: kontrollu</div>
+          </div>
+          <div class="kpi warn">
+            <div class="label">Source / Sink Ratio</div>
+            <div class="value">1.14</div>
+            <div class="sub">Hedef: 0.90 - 1.10<br />Fazla yumusak</div>
+          </div>
+          <div class="kpi good">
+            <div class="label">Spend Session Rate</div>
+            <div class="value">23.6%</div>
+            <div class="sub">Hedef: 18% - 35%<br />Saglikli</div>
+          </div>
+          <div class="kpi bad">
+            <div class="label">Zero-Balance Rate</div>
+            <div class="value">16.8%</div>
+            <div class="sub">Hedef: 8% - 15%<br />Starved segment buyuyor</div>
+          </div>
+          <div class="kpi warn">
+            <div class="label">Hoarding Rate</div>
+            <div class="value">22.1%</div>
+            <div class="sub">Hedef: &lt; 20%<br />Late game yumusak</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Resource Flow</h2>
+            <p class="lead">Kaynak oyuncuya nereden geliyor, nerede harcaniyor, gun sonunda ne kaliyor.</p>
+          </div>
+        </div>
+        <div class="layout-2">
+          <div class="card">
+            <h3>Main Source vs Sink Mix</h3>
+            <div class="metric-list">
+              <div class="metric-row">
+                <div>Level win rewards</div>
+                <div><strong>42%</strong></div>
+                <div class="bar"><div class="fill blue" style="width: 42%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Daily / streak rewards</div>
+                <div><strong>24%</strong></div>
+                <div class="bar"><div class="fill blue" style="width: 24%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Event grants</div>
+                <div><strong>21%</strong></div>
+                <div class="bar"><div class="fill blue" style="width: 21%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Purchase bonus economy</div>
+                <div><strong>13%</strong></div>
+                <div class="bar"><div class="fill blue" style="width: 13%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Pre-level booster spend</div>
+                <div><strong>34%</strong></div>
+                <div class="bar"><div class="fill amber" style="width: 34%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Continue spend</div>
+                <div><strong>29%</strong></div>
+                <div class="bar"><div class="fill amber" style="width: 29%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Shop spend</div>
+                <div><strong>19%</strong></div>
+                <div class="bar"><div class="fill amber" style="width: 19%"></div></div>
+              </div>
+              <div class="metric-row">
+                <div>Fail recovery spend</div>
+                <div><strong>18%</strong></div>
+                <div class="bar"><div class="fill amber" style="width: 18%"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="layout-3">
+            <div class="card">
+              <h3>Net Delta / Active User</h3>
+              <div class="value">+18</div>
+              <div class="sub">Pozitif delta var. Sistem biraz fazla kaynak biriktiriyor.</div>
+            </div>
+            <div class="card">
+              <h3>Median End-of-Day Balance</h3>
+              <div class="value">126</div>
+              <div class="sub">P25: 18 / P75: 318<br />Dagilim aciliyor.</div>
+            </div>
+            <div class="card">
+              <h3>Primary Call</h3>
+              <div class="sub">
+                Reward tarafini global kisma. Once late-game sink gorunurlugunu ve
+                event grantlerini segment bazli daralt.
+              </div>
+            </div>
+            <div class="card">
+              <h3>Healthy Band</h3>
+              <div class="sub">Gun sonu median balance hedefi: 80 - 140</div>
+            </div>
+            <div class="card">
+              <h3>Watchlist</h3>
+              <div class="sub">Mid-game continue spend asiri yuksek, pre-level spend dusuk.</div>
+            </div>
+            <div class="card">
+              <h3>Interpretation</h3>
+              <div class="sub">Oyuncu basincta degil; ama harcamaya giden ana sink yapisi optimize degil.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Friction and Spend</h2>
+            <p class="lead">Harcama oyuncuya yardim ediyor mu, yoksa ceza gibi mi calisiyor.</p>
+          </div>
+        </div>
+        <div class="layout-3">
+          <div class="card">
+            <h3>Core KPI Read</h3>
+            <ul>
+              <li><strong>Resource-gated fail rate:</strong> 27.4% <span class="tag bad">high</span></li>
+              <li><strong>Spend rescue rate:</strong> 38.9% <span class="tag good">ok</span></li>
+              <li><strong>Continue offer accept:</strong> 14.2% <span class="tag warn">low-mid</span></li>
+              <li><strong>Booster purchase attach:</strong> 11.6% <span class="tag good">healthy</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Decision Formula</h3>
+            <div class="formula">if zero_balance_rate rises
+and spend_rescue_rate falls:
+  check level-band fail pressure
+  then review continue value
+  then review booster price
+
+if hoarding rises
+and spend_session_rate falls:
+  increase sink visibility
+  add segment-specific spend hooks</div>
+          </div>
+          <div class="card">
+            <h3>Current Interpretation</h3>
+            <ul>
+              <li>Starved oyuncular harcama yapiyor ama harcama her zaman kurtarmiyor.</li>
+              <li>Continue teklifi ozellikle mid-game'de yeterince cekici degil.</li>
+              <li>Asil sorun global ekonomi degil; belirli level bandlerde surtunme toplanmis.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Segments and Level Design</h2>
+            <p class="lead">Ekonomi ve zorluk ayni panelde okunur. Boylece monetization baskisi ile difficulty spike karismaz.</p>
+          </div>
+        </div>
+        <div class="layout-2">
+          <div class="card">
+            <h3>Level Band Pressure Table</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Level Band</th>
+                    <th>Source / Sink</th>
+                    <th>Zero-Balance</th>
+                    <th>Spend Rate</th>
+                    <th>Pressure Read</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1 - 50</strong></td>
+                    <td>1.22</td>
+                    <td>9.4%</td>
+                    <td>14.1%</td>
+                    <td><span class="tag info">soft</span></td>
+                    <td>Sink surface artir, reward degil</td>
+                  </tr>
+                  <tr>
+                    <td><strong>51 - 200</strong></td>
+                    <td>0.88</td>
+                    <td>18.9%</td>
+                    <td>28.4%</td>
+                    <td><span class="tag bad">harsh</span></td>
+                    <td>Outlier level review + continue offer tune</td>
+                  </tr>
+                  <tr>
+                    <td><strong>201+</strong></td>
+                    <td>1.31</td>
+                    <td>11.3%</td>
+                    <td>19.8%</td>
+                    <td><span class="tag warn">hoarding</span></td>
+                    <td>Meta sink ve event spend hooks ekle</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="layout-3">
+            <div class="card">
+              <h3>Segment Snapshot</h3>
+              <ul>
+                <li><strong>Starved:</strong> 14% <span class="tag bad">up</span></li>
+                <li><strong>Healthy:</strong> 49% <span class="tag good">stable</span></li>
+                <li><strong>Hoarder:</strong> 23% <span class="tag warn">high</span></li>
+                <li><strong>Struggler:</strong> 14% <span class="tag warn">watch</span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Outlier Levels</h3>
+              <ul>
+                <li>Level 87: fail spike + continue reject</li>
+                <li>Level 114: spend var, rescue yok</li>
+                <li>Level 163: sink pressure asiri yuksek</li>
+                <li>Level 248: reward fazla, hoarding yaratiyor</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Last 7d Changes</h3>
+              <ul>
+                <li>`econ_42`: event grant +12%</li>
+                <li>Band 51-120: move count -1</li>
+                <li>Continue offer price same</li>
+                <li>Late-game event store acildi</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Segment Actions</h3>
+              <ul>
+                <li>Starved: softer recovery + rescue pack</li>
+                <li>Hoarder: stronger optional sinks</li>
+                <li>Struggler: level relief + contextual tips</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Guardrails</h3>
+              <ul>
+                <li>D1 retention drop &gt; 1.5 pt olursa geri al</li>
+                <li>Zero-balance &gt; 18% kalirsa global reward kisma</li>
+                <li>Outlier level sayisi artarsa level team review</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Recommended This Week</h3>
+              <div class="sub">
+                Mid band icin continue value test et. Late band icin yeni sink dene.
+                Early band'i simdilik sabit tut.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Intervention Playbook</h2>
+            <p class="lead">Dashboard yalnizca gostermez; neye nasil mudahale edilecegini de soyler.</p>
+          </div>
+        </div>
+        <div class="layout-3">
+          <div class="callout-list">
+            <div class="callout">
+              <strong>Belirti: Zero-balance hizla artiyor</strong>
+              Once level-band fail pressure bak. Sonra continue value ve booster fiyatini kontrol et. Global reward artirma son tercih olsun.
+            </div>
+            <div class="callout">
+              <strong>Belirti: Hoarding buyuyor</strong>
+              Yeni source ekleme. Sink gorunurlugunu, event spend hook'unu, ve late-game meta ihtiyaclarini arttir.
+            </div>
+          </div>
+          <div class="callout-list">
+            <div class="callout">
+              <strong>Belirti: Spend var ama rescue yok</strong>
+              Bu saglikli monetization degil. Continue teklif degeri veya level fairness yeniden ayarlanmalı.
+            </div>
+            <div class="callout">
+              <strong>Belirti: Segment farki buyuyor</strong>
+              Global tuning yerine `starved` ve `hoarder` segmentlerine ayri uygulama cikar.
+            </div>
+          </div>
+          <div class="callout-list">
+            <div class="callout">
+              <strong>V1 rule</strong>
+              Ilk versiyonda 8 KPI disina cikma. Panelin gorevi veri sergilemek degil, operasyon karari hizlandirmak.
+            </div>
+            <div class="callout">
+              <strong>Data rule</strong>
+              Tum yorumlar `config_snapshot_id` ve `level_band` baglaminda okunmali. Aksi halde neden-sonuc bulanir.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
